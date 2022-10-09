@@ -8,6 +8,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "cloc": "^2.10.0",
+    "global": "^4.4.0",
     "sass": "^1.55.0",
     "vue": "3.2.31",
     "vue-router": "4.0.14"
