@@ -22,28 +22,33 @@ export const useSwipe = (element: Ref<HTMLElement | null>) => {
             return y > 0 ? 'down' : 'up'//反之亦然
         }
     })//方向变量（计算属性）
+    const onStart = (e: TouchEvent) => {
+        swiping.value = true
+        end.value = start.value = { x: e.touches[0].screenX, y: e.touches[0].screenY }
+    }
+    const onMove = (e: TouchEvent) => {
+        if (!start.value) { return }
+        end.value = { x: e.touches[0].screenX, y: e.touches[0].screenY, }
+    }
+    const onEnd = (e: TouchEvent) => {
+        swiping.value = false
+    }
+
     onMounted(() => {
-        element.value?.addEventListener('touchstart', e => {
-            start.value = {
-                x: e.touches[0].clientX,//手指基 于文档的位置
-                y: e.touches[0].clientY,
-            }
-            end.value = undefined//先置空 按下之后才会记录end的坐标
-            swiping.value = true //移动了就让他为true
-        })
-        element.value?.addEventListener('touchmove', e => {
-            end.value = {
-                x: e.touches[0].clientX,//手指基 于文档的位置
-                y: e.touches[0].clientY,
-            }//移动时记录end的坐标
-        })
-        element.value?.addEventListener('touchend', e => {
-            swiping.value = false //结束就不记录移动
-
-        })
-
-    })//挂在之后监听
+        if (!element.value) { return }
+        element.value.addEventListener('touchstart', onStart)
+        element.value.addEventListener('touchmove', onMove)
+        element.value.addEventListener('touchend', onEnd)
+    })
+    onUnmounted(() => {
+        if (!element.value) { return }
+        element.value.removeEventListener('touchstart', onStart)
+        element.value.removeEventListener('touchmove', onMove)
+        element.value.removeEventListener('touchend', onEnd)//结束时销毁
+    })
     return {
-        swiping,distance,direction,start,end
+        swiping,
+        direction,
+        distance,
     }
 }
