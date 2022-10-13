@@ -5,12 +5,12 @@ import {useSwipe} from "../hooks/useSwipe";
 
 export const Welcome = defineComponent({
     setup: (props, context) => {
-        const main = ref<HTMLElement | null>(null)
+        const main = ref<HTMLElement>()
         // @ts-ignore
-        const { direction, swiping } = useSwipe(main)
-        watchEffect(() => {
-            console.log(direction.value,swiping.value)
-        })
+        // const { direction, swiping } = useSwipe(main)
+        // watchEffect(() => {
+        //     console.log(direction.value,swiping.value)
+        // })
         return () => <div class={s.wrapper}>
             <header>
                 <svg>
