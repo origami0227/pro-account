@@ -17,13 +17,13 @@ export const Welcome = defineComponent({
         const route = useRoute()
         const router = useRouter()
         const {direction, swiping} = useSwipe(main, {beforeStart: e => e.preventDefault()})
-        const push = throttle(() => {
+        const replace = throttle(() => {
             const name = (route.name || 'Welcome1').toString()
-            router.push(pushMap[name])
+            router.replace(pushMap[name])
         }, 500)//左滑动作
         watchEffect(() => {
             if (swiping.value && direction.value === 'left') {
-                push()
+                replace()
             }
         })
         return () => <div class={s.wrapper}>
