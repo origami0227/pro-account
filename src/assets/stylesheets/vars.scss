@@ -1,14 +1,14 @@
 :root {
   --welcome-card-bg: white;
   --welcome-text: white;
-  --welcome-bg-start: #4d83dd;
-  --welcome-bg-end: #88c7e8;
+  --welcome-bg-start: #16a2d9;
+  --welcome-bg-end: #216fdd;
   --welcome-nav-height: 64px;
   --welcome-nav-gap: 8px;
   --z-index-bottom-nav: 8;
   --z-index-overlay: 16;
   --transition-duration: 0.5s;
-  --button-bg: #5d7dc8;
+  --button-bg: #168bd9;
   --button-text: white;
   --button-font-size: 18px;
   --button-radius: 8px;
@@ -23,4 +23,5 @@
   --overlay-mask-bg: rgba(0, 0, 0, 0.5);
   --overlay-bg: white;
   --top-safe-area-height: 24px;
+  --tabs-indicator-bg: rgba(255, 255, 255, 0.5);
 }
