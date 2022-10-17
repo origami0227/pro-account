@@ -5,14 +5,17 @@
     align-items: center;
     text-align: center;
     color: var(--navbar-text);
+
     > li {
       flex-grow: 1;
       flex-shrink: 0;
       padding: 12px 0;
       background: var(--navbar-bg-end);
-      &.selected{
+
+      &.selected {
         position: relative;
-        &::after{
+
+        &::after, &::before {
           content: '';
           display: block;
           position: absolute;
@@ -21,9 +24,20 @@
           width: 100%;
           height: 4px;
           background: var(--tabs-indicator-bg);
+          animation: animations-for-right-show 0.3s linear forwards;
         }
       }
     }
+  }
+}
+@keyframes animations-for-right-show {
+  0% {
+    opacity: 0;
+    transform: translateX(0px);
+  }
+  100% {
+    transform: translateX(0px);
+    opacity: 1;
   }
 }
 
