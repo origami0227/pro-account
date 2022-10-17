@@ -13,19 +13,70 @@ export const InputPad = defineComponent({
     setup: (props, context) => {
         const now = new Date()
         const buttons = [
-            { text: '1', onClick: () => { appendText(1) }},
-            { text: '2', onClick: () => { appendText(2) } },
-            { text: '3', onClick: () => { appendText(3) } },
-            { text: '4', onClick: () => { appendText(4) } },
-            { text: '5', onClick: () => { appendText(5) } },
-            { text: '6', onClick: () => { appendText(6) } },
-            { text: '7', onClick: () => { appendText(7) } },
-            { text: '8', onClick: () => { appendText(8) } },
-            { text: '9', onClick: () => { appendText(9) } },
-            { text: '.', onClick: () => { appendText('.') } },
-            { text: '0', onClick: () => { appendText(0) } },
-            { text: '清空', onClick: () => {refAmount.value = '0'}},
-            { text: '提交', onClick: () => {}},
+            {
+                text: '1', onClick: () => {
+                    appendText(1)
+                }
+            },
+            {
+                text: '2', onClick: () => {
+                    appendText(2)
+                }
+            },
+            {
+                text: '3', onClick: () => {
+                    appendText(3)
+                }
+            },
+            {
+                text: '4', onClick: () => {
+                    appendText(4)
+                }
+            },
+            {
+                text: '5', onClick: () => {
+                    appendText(5)
+                }
+            },
+            {
+                text: '6', onClick: () => {
+                    appendText(6)
+                }
+            },
+            {
+                text: '7', onClick: () => {
+                    appendText(7)
+                }
+            },
+            {
+                text: '8', onClick: () => {
+                    appendText(8)
+                }
+            },
+            {
+                text: '9', onClick: () => {
+                    appendText(9)
+                }
+            },
+            {
+                text: '.', onClick: () => {
+                    appendText('.')
+                }
+            },
+            {
+                text: '0', onClick: () => {
+                    appendText(0)
+                }
+            },
+            {
+                text: '清空', onClick: () => {
+                    refAmount.value = '0'
+                }
+            },
+            {
+                text: '记账', onClick: () => {
+                }
+            },
         ]
         const refDate = ref<Date>(now)//用户选择的时间
         const refDatePickerVisible = ref(false)//默认关闭
@@ -40,7 +91,30 @@ export const InputPad = defineComponent({
             hideDatePicker()
         }
         const refAmount = ref('0')
-        const appendText = (n: number | string) => refAmount.value += n.toString()
+        const appendText = (n: number | string) => {
+            const nString = n.toString()
+            const dotIndex = refAmount.value.indexOf('.') //记录小数点
+            if (refAmount.value.length >= 13) {//最多13位 整数部分10位
+                return
+            }
+            if (dotIndex >= 0 && refAmount.value.length - dotIndex > 2) {//有小数点且小数点之后最多两位
+                return
+            }
+            if (nString === '.') {//如果要输入一个 小数点
+                if (dotIndex >= 0) {// 如果已经有小数点了
+                    return //相当于没打
+                }
+            } else if (nString === '0') {//如果要输入0
+                if (refAmount.value === '0') {//但是前面有一个0 也就00这种写法不被允许
+                    return
+                }
+            } else { //不输入小数点也不输入0
+                if (refAmount.value === '0') {
+                    refAmount.value = '' //把初始的0删除
+                }
+            }
+            refAmount.value += nString
+        }
         return () => <>
             <div class={s.dateAndAmount}>
         <span class={s.date}>
