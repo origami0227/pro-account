@@ -1,5 +1,8 @@
 .tabs {
   position: relative;
+  &::-webkit-scrollbar {
+    width: 0;
+  }
   &_nav {
     display: flex;
     justify-content: space-between;
