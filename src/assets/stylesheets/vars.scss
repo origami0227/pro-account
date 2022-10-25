@@ -21,6 +21,9 @@
   --overlay-user-text: white;
   --overlay-mask-bg: rgba(0, 0, 0, 0.5);
   --overlay-bg: white;
+  --list-tag-text: #333;
+  --list-amount-text: var(--amount-text);
+  --list-time-text: var(--date-text);
   --input-min-height: 48px;
   --input-border-color: #5c33be;
   --input-radius: var(--button-radius);
@@ -40,4 +43,8 @@
   --tag-bg: #EFEFEF;
   --top-safe-area-height: 24px;
   --tabs-indicator-bg: rgba(255, 255, 255, 0.5);
+  --total-bg: #252A43;
+  --total-text: white;
+  --total-income: #FE7275;
+  --total-expenses: #53A867;
 }
