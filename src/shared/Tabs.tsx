@@ -1,5 +1,6 @@
-import { defineComponent, PropType } from 'vue';
+import {defineComponent, PropType} from 'vue';
 import s from './Tabs.module.scss';
+
 export const Tabs = defineComponent({
     props: {
         classPrefix: {
@@ -14,6 +15,7 @@ export const Tabs = defineComponent({
             required: false,
         }
     },
+    emits:['update:selected'],
     setup: (props, context) => {
         return () => {
             const tabs = context.slots.default?.()
