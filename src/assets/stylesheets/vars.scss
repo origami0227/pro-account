@@ -1,5 +1,6 @@
 :root {
   --amount-text: #53A867;
+  --van-overlay-z-index: 40 !important;
   --bg: white;
   --button-bg: #168bd9;
   --button-text: white;
@@ -12,7 +13,7 @@
   --dialog-header-text: white;
   --float-button-text: white;
   --float-button-bg: var(--button-bg);
-  --main:#216fdd;
+  --main: #216fdd;
   --number-button-color: white;
   --number-button-bg-important: #216fdd;
   --number-button-text-important: white;
