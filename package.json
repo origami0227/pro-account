@@ -1,5 +1,5 @@
 {
-  "name": "mangosteen-fe-1",
+  "name": "kabi",
   "private": true,
   "version": "0.0.0",
   "scripts": {
@@ -8,6 +8,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "echarts": "5.3.2",
     "cloc": "^2.10.0",
     "global": "^4.4.0",
     "sass": "^1.55.0",
