@@ -48,17 +48,20 @@ export const FormItem = defineComponent({
         const timer = ref<number>()//间隔器
         const count = ref<number>(props.countFrom)//数字显示
         const isCounting = computed(() => !!timer.value)//计算属性判断发送验证码的状态,isCounting的布尔值和timer的value同时为真或者同时为假
-        const onClickSendValidationCode = () => {
-            props.onClick?.()
+        const startCount = () =>{
             timer.value = setInterval(() => {
                 count.value -= 1
-                if (timer.value === 0) {
+                if (count.value === 0) {
                     clearInterval(timer.value)
                     timer.value = undefined//重置
                     count.value = props.countFrom//重置
                 }
             }, 1000)
         }
+        context.expose({
+            // startCount:startCount //左边是字符串右边是函数可以缩写为下面
+            startCount
+        })
         const content = computed(() => {
             switch (props.type) {
                 case 'text':
@@ -77,9 +80,9 @@ export const FormItem = defineComponent({
                     return <>
                         <input class={[s.formItem, s.input, s.validationCodeInput]}
                                placeholder={props.placeholder}/>
-                        <Button disabled={isCounting.value} onClick={onClickSendValidationCode}
+                        <Button disabled={isCounting.value} onClick={props.onClick}
                                 class={[s.formItem, s.button, s.validationCodeButton]}>
-                            {isCounting.value ? `${count.value}秒后可发送`: '发送验证码'}
+                            {isCounting.value ? `${count.value}秒后可发送` : '发送验证码'}
                         </Button>
                     </>
                 case 'select':
