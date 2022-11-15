@@ -4,6 +4,7 @@ import {EmojiSelect} from './EmojiSelect';
 import s from './Form.module.scss';
 import {Time} from './time';
 import {Button} from "./Button";
+import {getFriendlyError} from "./getFriendlyError";
 
 export const Form = defineComponent({
     props: {
@@ -48,7 +49,7 @@ export const FormItem = defineComponent({
         const timer = ref<number>()//间隔器
         const count = ref<number>(props.countFrom)//数字显示
         const isCounting = computed(() => !!timer.value)//计算属性判断发送验证码的状态,isCounting的布尔值和timer的value同时为真或者同时为假
-        const startCount = () =>{
+        const startCount = () => {
             timer.value = setInterval(() => {
                 count.value -= 1
                 if (count.value === 0) {
@@ -125,7 +126,7 @@ export const FormItem = defineComponent({
                         {content.value}
                     </div>
                     <div class={s.formItem_errorHint}>
-                        <span>{props.error ?? '　'}</span>
+                        <span>{props.error ? getFriendlyError(props.error) : ' '}</span>
                     </div>
                 </label>
             </div>

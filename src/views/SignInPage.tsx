@@ -5,12 +5,13 @@ import {Form, FormItem} from '../shared/Form';
 import {Icon} from '../shared/Icon';
 import {validate} from '../shared/validate';
 import s from './SignInPage.module.scss';
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
+import { http } from '../shared/Http';
 
 export const SignInPage = defineComponent({
     setup: (props, context) => {
         const formData = reactive({
-            email: '',
+            email: '1071242996@qq.com',
             code: ''
         })
         const errors = reactive({
@@ -30,12 +31,16 @@ export const SignInPage = defineComponent({
                 {key: 'code', type: 'required', message: '必填'},
             ]))
         }
+        const onError = (error: any) => {
+            if (error.response.status === 422) {
+                Object.assign(errors, error.response.data.errors)
+            }
+            throw error
+        }
         const onClickSendValidationCode = async () => {
             //使用axios来发送请求，请求结果使用await，注意使用await需要在函数async中进行
-            const response = await axios.post('/api/v1/validation_codes', {email: formData.email})
-                .catch(()=>{
-                    //发送失败
-                })
+            const response = await http.post('/validation_codes', {email: formData.email})
+                .catch(onError)
             //发送成功
             console.log(response)
             refValidationCode.value.startCount()//成功后调用FormItem暴露出来的startCount
@@ -58,7 +63,7 @@ export const SignInPage = defineComponent({
                                           v-model={formData.email}/>
                                 <FormItem label="验证码" type="validationCode"
                                           ref={refValidationCode}
-                                          countFrom={3}
+                                          countFrom={1}
                                           placeholder="请输入六位数字"
                                           error={errors.code?.[0]}
                                           onClick={onClickSendValidationCode}
