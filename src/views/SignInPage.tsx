@@ -7,6 +7,7 @@ import {validate} from '../shared/validate';
 import s from './SignInPage.module.scss';
 import axios, { AxiosResponse } from "axios";
 import { http } from '../shared/Http';
+import { useBool } from '../hooks/useBool';
 
 export const SignInPage = defineComponent({
     setup: (props, context) => {
@@ -19,6 +20,7 @@ export const SignInPage = defineComponent({
             code: []
         })
         const refValidationCode = ref<any>('')
+        const { ref: refDisabled, toggle, on: disabled, off: enable } = useBool(false)
         const onSubmit = (e: Event) => {
             console.log('submit')
             e.preventDefault()
@@ -38,9 +40,11 @@ export const SignInPage = defineComponent({
             throw error
         }
         const onClickSendValidationCode = async () => {
+            disabled()//先禁用
             //使用axios来发送请求，请求结果使用await，注意使用await需要在函数async中进行
             const response = await http.post('/validation_codes', {email: formData.email})
                 .catch(onError)
+                .finally(enable)//取消禁用
             //发送成功
             console.log(response)
             refValidationCode.value.startCount()//成功后调用FormItem暴露出来的startCount
@@ -64,6 +68,7 @@ export const SignInPage = defineComponent({
                                 <FormItem label="验证码" type="validationCode"
                                           ref={refValidationCode}
                                           countFrom={1}
+                                          disabled={refDisabled.value}
                                           placeholder="请输入六位数字"
                                           error={errors.code?.[0]}
                                           onClick={onClickSendValidationCode}
