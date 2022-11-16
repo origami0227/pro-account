@@ -3,11 +3,11 @@ import {MainLayout} from '../layouts/MainLayout';
 import {Button} from '../shared/Button';
 import {Form, FormItem} from '../shared/Form';
 import {Icon} from '../shared/Icon';
-import {validate} from '../shared/validate';
+import {validate,hasError} from '../shared/validate';
 import s from './SignInPage.module.scss';
-import axios, { AxiosResponse } from "axios";
-import { http } from '../shared/Http';
-import { useBool } from '../hooks/useBool';
+import axios, {AxiosResponse} from "axios";
+import {http} from '../shared/Http';
+import {useBool} from '../hooks/useBool';
 
 export const SignInPage = defineComponent({
     setup: (props, context) => {
@@ -20,8 +20,8 @@ export const SignInPage = defineComponent({
             code: []
         })
         const refValidationCode = ref<any>('')
-        const { ref: refDisabled, toggle, on: disabled, off: enable } = useBool(false)
-        const onSubmit = (e: Event) => {
+        const {ref: refDisabled, toggle, on: disabled, off: enable} = useBool(false)
+        const onSubmit = async (e: Event) => {
             console.log('submit')
             e.preventDefault()
             Object.assign(errors, {
@@ -32,6 +32,9 @@ export const SignInPage = defineComponent({
                 {key: 'email', type: 'pattern', regex: /.+@.+/, message: '必须是邮箱地址'},
                 {key: 'code', type: 'required', message: '必填'},
             ]))
+            if(!hasError(errors)){
+                const response = await http.post('/session', formData)
+            }
         }
         const onError = (error: any) => {
             if (error.response.status === 422) {
@@ -60,6 +63,7 @@ export const SignInPage = defineComponent({
                                 <Icon class={s.icon} name="kabi"/>
                                 <h1 class={s.appName}>卡比记账</h1>
                             </div>
+                            {/*<div>{JSON.stringify(formData)}</div>*/}
                             <Form onSubmit={onSubmit}>
                                 <FormItem label="邮箱地址" type="text"
                                           error={errors.email?.[0]}
@@ -74,7 +78,7 @@ export const SignInPage = defineComponent({
                                           onClick={onClickSendValidationCode}
                                           v-model={formData.code}/>
                                 <FormItem style={{paddingTop: '48px'}}>
-                                    <Button>登陆/注册</Button>
+                                    <Button type="submit">登陆/注册</Button>
                                 </FormItem>
                             </Form>
                         </div>
