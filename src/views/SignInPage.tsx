@@ -12,7 +12,7 @@ import {useRoute, useRouter} from "vue-router";
 export const SignInPage = defineComponent({
     setup: (props, context) => {
         const formData = reactive({
-            email: '1071242996@qq.com',
+            email: '',
             code: ''
         })
         const errors = reactive({
