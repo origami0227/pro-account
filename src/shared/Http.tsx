@@ -1,5 +1,5 @@
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
-import { mockSession } from "../mock/mock";
+import {mockSession, mockTagIndex} from "../mock/mock";
 
 type GetConfig = Omit<AxiosRequestConfig, 'params' | 'url' | 'method'>
 type PostConfig = Omit<AxiosRequestConfig, 'url' | 'data' | 'method'>
@@ -34,6 +34,11 @@ const mock = (response: AxiosResponse) => {
         && location.hostname !== '127.0.0.1' //这三个地址是开发的本地地址
         && location.hostname !== '192.168.3.57') { return false }//如果不是这个三个地址就return false 也就是不能更改
     switch (response.config?.params?._mock) {//看请求参数是否含有_mock,有mock就根据mock字符串找到对应的函数
+        case 'tagIndex':
+            [response.status, response.data] = mockTagIndex(response.config)
+            console.log('response')
+            console.log(response)
+            return true
         case 'session':
             [response.status, response.data] = mockSession(response.config)
             return true

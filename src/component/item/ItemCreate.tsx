@@ -1,9 +1,10 @@
-import {defineComponent, onUpdated, PropType, ref} from 'vue';
+import {defineComponent, onMounted, onUpdated, PropType, ref} from 'vue';
 import s from './ItemCreate.module.scss';
 import {MainLayout} from "../../layouts/MainLayout";
 import {Icon} from "../../shared/Icon";
 import {Tab, Tabs} from "../../shared/Tabs";
 import {InputPad} from "./InputPad";
+import {http} from "../../shared/Http";
 
 
 export const ItemCreate = defineComponent({
@@ -14,36 +15,27 @@ export const ItemCreate = defineComponent({
     },
     setup: (props, context) => {
         const refKind = ref('支出')
-        const refExpensesTags = ref([
-            {id: 1, name: '餐饮', sign: '￥', category: 'expenses'},
-            {id: 2, name: '打车', sign: '￥', category: 'expenses'},
-            {id: 3, name: '地铁', sign: '￥', category: 'expenses'},
-            {id: 4, name: '公交', sign: '￥', category: 'expenses'},
-            {id: 5, name: '房租', sign: '￥', category: 'expenses'},
-            {id: 6, name: '游玩', sign: '￥', category: 'expenses'},
-            {id: 7, name: '聚餐', sign: '￥', category: 'expenses'},
-            {id: 8, name: '购物', sign: '￥', category: 'expenses'},
-            {id: 9, name: '生活', sign: '￥', category: 'expenses'},
-            {id: 10, name: '公益', sign: '￥', category: 'expenses'},
-            {id: 11, name: '保险', sign: '￥', category: 'expenses'},
-            {id: 12, name: '医疗', sign: '￥', category: 'expenses'},
-            {id: 13, name: '宠物', sign: '￥', category: 'expenses'},
-            {id: 14, name: '还款', sign: '￥', category: 'expenses'},
-            {id: 15, name: '游戏', sign: '￥', category: 'expenses'},
-        ])
-        const refIncomeTags = ref([
-            {id: 16, name: '工资', sign: '￥', category: 'income'},
-            {id: 17, name: '彩票', sign: '￥', category: 'income'},
-            {id: 18, name: '基金', sign: '￥', category: 'income'},
-            {id: 19, name: '债券', sign: '￥', category: 'income'},
-            {id: 20, name: '定期', sign: '￥', category: 'income'},
-            {id: 21, name: '外汇', sign: '￥', category: 'income'},
-            {id: 22, name: '股票', sign: '￥', category: 'income'},
-            {id: 23, name: '贵金属', sign: '￥', category: 'income'},
-            {id: 24, name: '虚拟货币', sign: '￥', category: 'income'},
-            {id: 25, name: '转账', sign: '￥', category: 'income'},
-            {id: 16, name: '红包', sign: '￥', category: 'income'},
-        ])
+        //发送请求的操作在onMounted中完成
+        onMounted(async () => {
+            //第一次请求支持支出 expenses  注意get的第二个参数就是查询参数 不仅可以定义字符串，还可以定义函数的类型
+            const response = await http.get<{ resources: Tag[] }>('/tags', {
+                //查询参数
+                kind: 'expenses',
+                _mock: 'tagIndex',
+            })
+            refExpensesTags.value = response.data.resources//赋值
+        })
+        onMounted(async () => {
+            //第一次请求支持支出 income
+            const response = await http.get<{ resources: Tag[] }>('/tags', {
+                //查询参数
+                kind: 'income',
+                _mock: 'tagIndex',
+            })
+            refIncomeTags.value = response.data.resources//赋值
+        })
+        const refExpensesTags = ref<Tag[]>([])
+        const refIncomeTags = ref<Tag[]>([])
         return () => (
             <MainLayout class={s.layout}>{{
                 title: () => '记一笔',
