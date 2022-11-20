@@ -36,8 +36,9 @@ export const SignInPage = defineComponent({
                 {key: 'code', type: 'required', message: '必填'},
             ]))
             if (!hasError(errors)) {
-                const response = await http.post<{ jwt: string }>('/session', formData)
+                const response = await http.post<{ jwt: string }>('/session', formData,{params:{_mock:'session'}}).catch(onError)//要mock这个响应，mock的名字是session
                 localStorage.setItem('jwt', response.data.jwt)
+                console.log(response)
                 //使用查询参数的思路
                 // await router.push('/sign_in?return_to'+encodeURIComponent(route.fullPath))//设置return_to
                 const returnTo = route.query.return_to?.toString() //因为地址栏一般不用答谢所以改成下划线，query后面接字符串就可以
