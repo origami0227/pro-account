@@ -18,20 +18,33 @@ export const ItemCreate = defineComponent({
         const refKind = ref('支出')
         const refPage = ref(0) //标记当前第几页 还没有请求的时候默认第0页
         const refHasMore = ref(false)//标记是否含有更多页
-        //发送请求的操作在onMounted中完成
-        onMounted(async () => {
-            //第一次请求支持支出 expenses  注意get的第二个参数就是查询参数 不仅可以定义字符串，还可以定义函数的类型
+        const refExpensesTags = ref<Tag[]>([])
+        const refIncomeTags = ref<Tag[]>([])
+        //请求封装 获取Tags
+        const fetchTags = async ()=>{
             const response = await http.get<Resources<Tag>>('/tags', {
-                //查询参数
                 kind: 'expenses',
                 _mock: 'tagIndex',
+                page: refPage.value + 1, //点击后 refPage的值先变成1 因为无法确定是否请求成功不能直接变
             })
             const {resources, pager} = response.data
-            refExpensesTags.value = resources //赋值
-            //分页： 之前请求过的满数据的页，乘上每页的数量，再加上最新一页没满的数据量，是否小于总数据量
+            refExpensesTags.value.push(...resources)//避免覆盖，选择push
             refHasMore.value = (pager.page - 1) * pager.per_page + resources.length < pager.count
-            console.log(refHasMore.value)
-        })
+            refPage.value += 1
+        }
+            // async () => {
+            // const response = await http.get<Resources<Tag>>('/tags', {
+            //     kind: 'expenses',
+            //     _mock: 'tagIndex',
+            //     page: refPage.value + 1, //点击后 refPage的值先变成1 因为无法确定是否请求成功不能直接变
+            // })
+            // const {resources, pager} = response.data
+            // refExpensesTags.value.push(...resources)//避免覆盖，选择push
+            // refHasMore.value = (pager.page - 1) * pager.per_page + resources.length < pager.count
+            // refPage.value += 1
+        // }
+        //发送请求的操作在onMounted中完成
+        onMounted(fetchTags)
         onMounted(async () => {
             //第一次请求支持支出 income
             const response = await http.get<{ resources: Tag[] }>('/tags', {
@@ -41,8 +54,8 @@ export const ItemCreate = defineComponent({
             })
             refIncomeTags.value = response.data.resources//赋值
         })
-        const refExpensesTags = ref<Tag[]>([])
-        const refIncomeTags = ref<Tag[]>([])
+
+
         return () => (
             <MainLayout class={s.layout}>{{
                 title: () => '记一笔',
@@ -51,7 +64,7 @@ export const ItemCreate = defineComponent({
                     {/*<Tabs selected={refKind.value} onUpdateSelected={name => refKind.value = name}>*/}
                     <div class={s.wrapper}>
                         <Tabs v-model:selected={refKind.value} class={s.tabs}>
-                            <Tab name="支出" >
+                            <Tab name="支出">
                                 <div class={s.tags_wrapper}>
                                     <div class={s.tag}>
                                         <div class={s.sign}>
@@ -75,7 +88,7 @@ export const ItemCreate = defineComponent({
                                 <div class={s.more}>
                                     {/*分页*/}
                                     {refHasMore ?
-                                        <Button>加载更多</Button> :
+                                        <Button onClick={fetchTags}>加载更多</Button> :
                                         <span>没有更多</span>}
                                 </div>
                             </Tab>

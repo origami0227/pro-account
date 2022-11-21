@@ -46,7 +46,7 @@ export const mockTagIndex: Mock = (config) => {
         ))
 
     if (kind === 'expenses' && (page === 1 || !page)) {
-        return [200, createBody(25)
+        return [200, createBody(25)]
         //     {
         //     resources: createTag(),//随机生成12个tag
         //     pager: {
@@ -55,12 +55,13 @@ export const mockTagIndex: Mock = (config) => {
         //         count,
         //     }
         // }
-        ]
     } else if (kind === 'expenses' && page === 2) {
         return [200, createBody(1)]
+    } else if (kind === 'income' && (page === 1 || !page)) {
+        return [200, createBody(25)]
     } else {
         return [200, {
-            resources: createTag(25)
+            resources: createBody(1)
         }]
     }
 }
