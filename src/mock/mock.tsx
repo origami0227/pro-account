@@ -45,7 +45,7 @@ export const mockTagIndex: Mock = (config) => {
             }
         ))
 
-    if (kind === 'expenses' && (page === 1 || !page)) {
+    if (kind === 'expenses' && (!page || page === 1)) {
         return [200, createBody(25)]
         //     {
         //     resources: createTag(),//随机生成12个tag
@@ -57,11 +57,9 @@ export const mockTagIndex: Mock = (config) => {
         // }
     } else if (kind === 'expenses' && page === 2) {
         return [200, createBody(1)]
-    } else if (kind === 'income' && (page === 1 || !page)) {
+    } else if (kind === 'income' && (!page || page === 1)) {
         return [200, createBody(25)]
     } else {
-        return [200, {
-            resources: createBody(1)
-        }]
+        return [200, createBody(1)]
     }
 }
