@@ -11,17 +11,17 @@ export const mockSession: Mock = (config) => {
         jwt: faker.random.word()
     }]
 }
-
+//id放外面使其成为全局变量
+let id = 0 //id初始为0
+const createId = () => {
+    id += 1 //id自增
+    return id
+}
 export const mockTagIndex: Mock = (config) => {
     const {kind, page} = config.params //析构赋值
     // 声明两个常量便于封装
     const per_page = 25
     const count = 26
-    let id = 0 //id初始为0
-    const createId = () => {
-        id += 1 //id自增
-        return id
-    }
     //封装创建pager函数，返回这三个字段
     const createPaper = (page = 1) => ({
         page,
