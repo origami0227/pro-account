@@ -36,7 +36,8 @@ export const ItemCreate = defineComponent({
                             </Tab>
                         </Tabs>
                         <div class={s.inputPad_wrapper}>
-                            <div>{refHappenAt.value}</div>
+                            {/*<div>{refHappenAt.value}</div>*/}
+                            <div>{refAmount.value}</div>
                             <InputPad
                                 v-model:happenAt={refHappenAt.value}
                                 v-model:amount={refAmount.value}/>

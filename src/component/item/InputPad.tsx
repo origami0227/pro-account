@@ -12,7 +12,7 @@ export const InputPad = defineComponent({
         happenAt: String,
         amount: Number,
     },
-    emits: ['update:happenAt','update:Amount'],
+    emits: ['update:happenAt', 'update:Amount'],
     setup: (props, context) => {
         const now = new Date()
         // const refDate = ref<Date>(now)//用户选择的时间 默认是现在的时间
@@ -79,6 +79,7 @@ export const InputPad = defineComponent({
             },
             {
                 text: '记账', onClick: () => {
+                    context.emit('update:Amount', refAmount.value)
                 }
             },
         ]
@@ -90,7 +91,7 @@ export const InputPad = defineComponent({
             refDatePickerVisible.value = false
         }//关闭
         const setDate = (date: Date) => {
-            context.emit('update:happenAt',date.toISOString()) //赋值改成传一个新的字符串
+            context.emit('update:happenAt', date.toISOString()) //赋值改成传一个新的字符串
             hideDatePicker()
         }
         const refAmount = ref('0')
