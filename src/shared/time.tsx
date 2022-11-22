@@ -11,9 +11,17 @@
 */
 export class Time {
     date: Date;
-    constructor(date = new Date()) {
-        this.date = date;
+
+    constructor(date?: string | Date ) {
+        if(date === undefined){
+            this.date = new Date(); //如果date不存在 date就等于new Date
+        }else if(typeof date === 'string'){
+            this.date = new Date(date) //接上这个date
+        }else {
+            this.date = date
+        }
     }
+
     format(pattern = 'YYYY-MM-DD') {
         // 目前支持的格式有 YYYY MM DD HH mm ss SSS
         const year = this.date.getFullYear()
@@ -31,21 +39,27 @@ export class Time {
             .replace(/ss/, second.toString().padStart(2, '0'))
             .replace(/SSS/, msecond.toString().padStart(3, '0'))
     }
+
     firstDayOfMonth() {
         return new Time(new Date(this.date.getFullYear(), this.date.getMonth(), 1, 0, 0, 0));
     }
+
     firstDayOfYear() {
         return new Time(new Date(this.date.getFullYear(), 0, 1, 0, 0, 0));
     }
+
     lastDayOfMonth() {
         return new Time(new Date(this.date.getFullYear(), this.date.getMonth() + 1, 0, 0, 0, 0));
     }
+
     lastDayOfYear() {
         return new Time(new Date(this.date.getFullYear() + 1, 0, 0, 0, 0, 0));
     }
+
     getRaw() {
         return this.date
     }
+
     add(amount: number, unit: 'year' | 'month' | 'day' | 'hour' | 'minute' | 'second' | 'millisecond') {
         // return new Time but not change this.date
         let date = new Date(this.date.getTime());

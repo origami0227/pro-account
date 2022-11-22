@@ -19,10 +19,12 @@ export const ItemCreate = defineComponent({
     setup: (props, context) => {
         const refKind = ref('支出') //标记支出收入的tab
         const refTagId = ref<number>() //标记tag 传给后端一个id
+        const refHappenAt = ref<string>(new Date().toISOString()) //标记记账事件发生时间
+        const refAmount = ref<number>(0)//标记记账金额，默认为0
         return () => (
             <MainLayout class={s.layout}>{{
                 title: () => '记一笔',
-                icon: () => <Icon name="left" class={s.navIcon} />,
+                icon: () => <Icon name="left" class={s.navIcon}/>,
                 default: () => <>
                     <div class={s.wrapper}>
                         <Tabs v-model:selected={refKind.value} class={s.tabs}>
@@ -34,7 +36,10 @@ export const ItemCreate = defineComponent({
                             </Tab>
                         </Tabs>
                         <div class={s.inputPad_wrapper}>
-                            <InputPad />
+                            <div>{refHappenAt.value}</div>
+                            <InputPad
+                                v-model:happenAt={refHappenAt.value}
+                                v-model:amount={refAmount.value}/>
                         </div>
                     </div>
                 </>

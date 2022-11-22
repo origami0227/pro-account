@@ -8,10 +8,14 @@ export const InputPad = defineComponent({
     props: {
         name: {
             type: String as PropType<string>
-        }
+        },
+        happenAt: String,
+        amount: Number,
     },
+    emits: ['update:happenAt','update:Amount'],
     setup: (props, context) => {
         const now = new Date()
+        // const refDate = ref<Date>(now)//用户选择的时间 默认是现在的时间
         const buttons = [
             {
                 text: '1', onClick: () => {
@@ -78,7 +82,6 @@ export const InputPad = defineComponent({
                 }
             },
         ]
-        const refDate = ref<Date>(now)//用户选择的时间
         const refDatePickerVisible = ref(false)//默认关闭
         const showDatePicker = () => {
             refDatePickerVisible.value = true
@@ -87,7 +90,7 @@ export const InputPad = defineComponent({
             refDatePickerVisible.value = false
         }//关闭
         const setDate = (date: Date) => {
-            refDate.value = date;
+            context.emit('update:happenAt',date.toISOString()) //赋值改成传一个新的字符串
             hideDatePicker()
         }
         const refAmount = ref('0')
@@ -120,9 +123,9 @@ export const InputPad = defineComponent({
         <span class={s.date}>
           <Icon name="date" class={s.icon}/>
           <span>
-            <span onClick={showDatePicker}>{new Time(refDate.value).format()}</span>
+            <span onClick={showDatePicker}>{new Time(props.happenAt).format()}</span>
               <Popup position='bottom' v-model:show={refDatePickerVisible.value}>
-                  <DatetimePicker value={refDate.value} type="date" title="选择年月日"
+                  <DatetimePicker value={props.happenAt} type="date" title="选择年月日"
                                   onConfirm={setDate} onCancel={hideDatePicker}/>
               </Popup>
 
