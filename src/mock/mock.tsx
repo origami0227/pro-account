@@ -6,6 +6,12 @@ type Mock = (config: AxiosRequestConfig) => [number, any]
 faker.setLocale('zh_CN');
 
 export const mockItemCreate: Mock = config => {
+    // return [422,{ //模拟错误
+    //     errors:{
+    //         tag_id:['必须选择标签'],
+    //         amount:['金额不能为0']
+    //     }
+    // }]
     return [200, {
         resource: {
             "id": 2264,
