@@ -12,7 +12,7 @@ export const InputPad = defineComponent({
         happenAt: String,
         amount: Number,
     },
-    emits: ['update:happenAt', 'update:Amount'],
+    emits: ['update:happenAt', 'update:amount'],
     setup: (props, context) => {
         const now = new Date()
         // const refDate = ref<Date>(now)//用户选择的时间 默认是现在的时间
@@ -77,9 +77,10 @@ export const InputPad = defineComponent({
                     refAmount.value = '0'
                 }
             },
-            {
+            {   //99.10 => 9910
                 text: '记账', onClick: () => {
-                    context.emit('update:Amount', refAmount.value)
+                    context.emit('update:amount',
+                        parseFloat(refAmount.value)*100) //string变回number
                 }
             },
         ]
@@ -94,7 +95,8 @@ export const InputPad = defineComponent({
             context.emit('update:happenAt', date.toISOString()) //赋值改成传一个新的字符串
             hideDatePicker()
         }
-        const refAmount = ref('0')
+        //9900 => 99 number变成string
+        const refAmount = ref(props.amount ? (props.amount / 100).toString() : '0')
         const appendText = (n: number | string) => {
             const nString = n.toString()
             const dotIndex = refAmount.value.indexOf('.') //记录小数点
