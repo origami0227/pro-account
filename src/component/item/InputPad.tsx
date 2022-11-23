@@ -9,6 +9,9 @@ export const InputPad = defineComponent({
         name: {
             type: String as PropType<string>
         },
+        onSubmit: {
+            type: Function as PropType<() => void>
+        },
         happenAt: String,
         amount: Number,
     },
@@ -80,8 +83,11 @@ export const InputPad = defineComponent({
             {   //99.10 => 9910
                 text: '记账', onClick: () => {
                     context.emit('update:amount',
-                        parseFloat(refAmount.value)*100) //string变回number
+                        parseFloat(refAmount.value) * 100) //string变回number
+                    //再调用onSubmit事件
+                    props.onSubmit?.()
                 }
+
             },
         ]
         const refDatePickerVisible = ref(false)//默认关闭

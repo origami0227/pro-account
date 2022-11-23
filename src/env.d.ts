@@ -24,3 +24,18 @@ type Resources<T = any> = { //声明Resource类型 T写在前面
     count: number
   }
 }
+type Item = {
+  id: number
+  user_id: number
+  amount: number
+  tags_id: number[]
+  happen_at: string
+  kind: expenses | income
+}
+type Resource<T> = {
+  resource: T
+}
+
+type ResourceError = {
+  errors: Record<string, string[]>
+}
