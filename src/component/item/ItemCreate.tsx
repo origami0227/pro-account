@@ -19,10 +19,10 @@ export const ItemCreate = defineComponent({
     },
     setup: (props, context) => {
         const formData = reactive({
-            kind:'支出', //kind字段默认支出
-            tags_id:[], //tagId默认一个数组
-            amount:0, //金额 amount默认0
-            happen_at:new Date().toISOString(), //默认是当前时间并且转化为iso字符串
+            kind: '支出', //kind字段默认支出
+            tags_id: [], //tagId默认一个数组
+            amount: 0, //金额 amount默认0
+            happen_at: new Date().toISOString(), //默认是当前时间并且转化为iso字符串
         })
         const router = useRouter()
         // const refKind = ref('支出') //标记支出收入的tab
@@ -39,8 +39,14 @@ export const ItemCreate = defineComponent({
             throw error
         }
         const onSubmit = async () => {
-            await http.post<Resource<Item>>('/items', formData,
-                { params: { _mock: 'itemCreate' } }
+            //由于之前我们请求中的kind发出的是中文不符合后端标准 所以会返回状态码500
+            //要进行一个对象的映射 让中文改成英文
+            const kindMap: Record<string, string> = {
+                '支出' : 'expenses',
+                '收入' : 'income',
+            }
+            await http.post<Resource<Item>>('/items', {...formData,kind:kindMap[formData.kind]},
+                {params: {_mock: 'itemCreate'}}
             ).catch(onError)
             router.push("/items")
         }
