@@ -1,4 +1,4 @@
-import {defineComponent, onUpdated, PropType} from 'vue';
+import {defineComponent, onUpdated, PropType, ref} from 'vue';
 import {Button} from '../../shared/Button';
 import {http} from '../../shared/Http';
 import {Icon} from '../../shared/Icon';
@@ -26,32 +26,60 @@ export const Tags = defineComponent({
         const onSelect = (tag: Tag) => {
             context.emit('update:selected', tag.id)
         }
+        const timer = ref<number>() //定义计时器
+        const currentTag = ref<HTMLDivElement>() //标记鼠标所指向的标签
+        const onLongPress = () => {
+            //声明长按事件
+            console.log('长按')
+        }
+        const onTouchStart = (e: TouchEvent) => {
+            currentTag.value = e.currentTarget as HTMLDivElement //标记开始时指向的元素
+            timer.value = setTimeout(() => {
+                onLongPress() //一秒后触发 长按事件
+            }, 1000)
+        }
+        const onTouchEnd = (e: TouchEvent) => {
+            //end的时候重置timer
+            clearTimeout(timer.value)
+        }
+        const onTouchMove = (e: TouchEvent) => {
+            //获取手指当前所指向的元素
+            const pointedElement = document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY)
+            //范围判断=> 如果出了范围 那么就重置timer
+            if (currentTag.value !== pointedElement &&
+                currentTag.value?.contains(pointedElement) === false) {
+                clearTimeout(timer.value)
+            }
+        }
+
         return () => <>
-            <div class={s.tags_wrapper}>
+            <div class={s.tags_wrapper} onTouchmove={onTouchMove}>
                 <RouterLink to={`/tags/create?kind=${props.kind}`} class={s.tag}>
                     <div class={s.sign}>
                         <Icon name="add" class={s.createTag}/>
                     </div>
                     <div class={s.name}>新增</div>
                 </RouterLink>
-        {tags.value.map(tag =>
-            <div class={[s.tag, props.selected === tag.id ? s.selected : '']}
-                 onClick={() => onSelect(tag)}>
-                <div class={s.sign}>
-                    {tag.sign}
-                </div>
-                <div class={s.name}>
-                    {tag.name}
-                </div>
+                {tags.value.map(tag =>
+                    <div class={[s.tag, props.selected === tag.id ? s.selected : '']}
+                         onClick={() => onSelect(tag)}
+                         onTouchstart={onTouchStart}
+                         onTouchend={onTouchEnd}>
+                        <div class={s.sign}>
+                            {tag.sign}
+                        </div>
+                        <div class={s.name}>
+                            {tag.name}
+                        </div>
+                    </div>
+                )}
             </div>
-        )}
-        </div>
-        <div class={s.more}>
-            {hasMore.value ?
-                <Button class={s.loadMore} onClick={fetchTags}>加载更多</Button> :
-                <span class={s.noMore}>没有更多</span>
-            }
-        </div>
-    </>
+            <div class={s.more}>
+                {hasMore.value ?
+                    <Button class={s.loadMore} onClick={fetchTags}>加载更多</Button> :
+                    <span class={s.noMore}>没有更多</span>
+                }
+            </div>
+        </>
     }
 })
