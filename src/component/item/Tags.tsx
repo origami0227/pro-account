@@ -4,7 +4,7 @@ import {http} from '../../shared/Http';
 import {Icon} from '../../shared/Icon';
 import {useTags} from '../../shared/useTags';
 import s from './Tags.module.scss';
-import {RouterLink} from 'vue-router';
+import {RouterLink, useRouter} from 'vue-router';
 
 export const Tags = defineComponent({
     props: {
@@ -28,14 +28,15 @@ export const Tags = defineComponent({
         }
         const timer = ref<number>() //定义计时器
         const currentTag = ref<HTMLDivElement>() //标记鼠标所指向的标签
-        const onLongPress = () => {
-            //声明长按事件
-            console.log('长按')
+        const router = useRouter();
+        const onLongPress = (tagId: Tag['id']) => {
+            //声明长按事件,跳转
+            router.push(`/tags/${tagId}/edit?kind=${props.kind}&return_to=${router.currentRoute.value.fullPath}`) //跳转到对应id
         }
-        const onTouchStart = (e: TouchEvent) => {
+        const onTouchStart = (e: TouchEvent, tag: Tag) => {
             currentTag.value = e.currentTarget as HTMLDivElement //标记开始时指向的元素
             timer.value = setTimeout(() => {
-                onLongPress() //一秒后触发 长按事件
+                onLongPress(tag.id) //一秒后触发 长按事件
             }, 1000)
         }
         const onTouchEnd = (e: TouchEvent) => {
@@ -63,7 +64,7 @@ export const Tags = defineComponent({
                 {tags.value.map(tag =>
                     <div class={[s.tag, props.selected === tag.id ? s.selected : '']}
                          onClick={() => onSelect(tag)}
-                         onTouchstart={onTouchStart}
+                         onTouchstart={(e)=>onTouchStart(e, tag)}
                          onTouchend={onTouchEnd}>
                         <div class={s.sign}>
                             {tag.sign}
