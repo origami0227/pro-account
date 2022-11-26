@@ -2,7 +2,8 @@ import {defineComponent, onMounted, PropType, ref} from 'vue';
 import { FloatButton } from '../../shared/FloatButton';
 import s from './ItemSummary.module.scss';
 import {http} from "../../shared/Http";
-import {Button} from "vant";
+import {Money} from "../../shared/Money";
+import { Button } from '../../shared/Button'
 export const ItemSummary = defineComponent({
     props: {
         startDate: {
@@ -64,7 +65,7 @@ export const ItemSummary = defineComponent({
                                     <div class={s.text}>
                                         <div class={s.tagAndAmount}>
                                             <span class={s.tag}>{item.tags_id[0]}</span>
-                                            <span class={s.amount}>￥<>{item.amount}</></span>
+                                            <span class={s.amount}>￥<Money value={item.amount}/></span>
                                         </div>
                                         <div class={s.time}>{item.happen_at}</div>
                                     </div>
