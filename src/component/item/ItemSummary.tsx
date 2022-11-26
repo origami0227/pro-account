@@ -7,11 +7,11 @@ export const ItemSummary = defineComponent({
     props: {
         startDate: {
             type: String as PropType<string>,
-            required: true
+            required: false
         },
         endDate: {
             type: String as PropType<string>,
-            required: true
+            required: false
         }
     },
     setup: (props, context) => {
@@ -19,6 +19,8 @@ export const ItemSummary = defineComponent({
         const hasMore = ref(false) //默认没有hasMore
         const page = ref(0) //page默认从0开始
         const fetchItems = async () => {
+            //条件判断，如果不存在起始和终止时间就直接返回
+            if(!props.startDate || !props.endDate){ return }
             //get获取信息
             const response = await http.get<Resources<Item>>('/items', {
                 happen_after: props.startDate,//起始事件
