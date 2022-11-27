@@ -1,7 +1,9 @@
-import {defineComponent, PropType, ref} from 'vue';
+import {defineComponent, onMounted, PropType, ref} from 'vue';
 import {Icon} from './Icon';
 import s from './Overlay.module.scss';
-import {RouterLink} from 'vue-router';
+import {RouterLink, useRoute} from 'vue-router';
+import {mePromise} from "./me";
+import {Dialog} from "vant";
 
 export const Overlay = defineComponent({
     props: {
@@ -10,22 +12,51 @@ export const Overlay = defineComponent({
         }
     },
     setup: (props, context) => {
+        const route = useRoute()
+        const me = ref<User>() //标记用户是否登录
+        onMounted(async () => {
+            //获取用户登录信息
+            const response = await mePromise
+            //将请求拿到的信息赋值给me
+            me.value = response?.data.resource
+        })
+        const onSignOut = async () => {
+            //登出弹窗提醒
+            await Dialog.confirm({
+                title: '确认',
+                message: '你真的要退出登录吗？',
+            })
+            //移除登录信息
+            localStorage.removeItem('jwt')
+        }
         const close = () => {
             props.onClose?.()
         }
-        const onClickSignIn = () => { }
+
+
         return () => <>
             <div class={s.mask} onClick={close}></div>
             <div class={s.overlay}>
-                <section class={s.currentUser} onClick={onClickSignIn}>
-                    <h2>未登录用户</h2>
-                    <p>点击这里登录</p>
+                <section class={s.currentUser}>
+                    {me.value ? (
+                        //如果存在就返回用户的登录邮箱
+                        <div>
+                            <h2 class={s.email}>{me.value.email}</h2>
+                            <p onClick={onSignOut}>点击这里退出登录</p>
+                        </div>
+                    ) : (
+                        //否则就显示为登录并可以跳转到登录界面
+                        <RouterLink to={`/sign_in?return_to=${route.fullPath}`}>
+                            <h2>未登录用户</h2>
+                            <p>点击这里登录</p>
+                        </RouterLink>
+                    )}
                 </section>
                 <nav>
                     <ul class={s.action_list}>
                         <li>
                             <RouterLink to="/statistics" class={s.action}>
-                                <Icon name="charts" class={s.icon} />
+                                <Icon name="charts" class={s.icon}/>
                                 <span>统计图表</span>
                             </RouterLink>
                         </li>
@@ -55,9 +86,9 @@ export const OverlayIcon = defineComponent({
             refOverlayVisible.value = !refOverlayVisible.value
         }
         return () => <>
-            <Icon name="menu" class={s.icon} onClick={onClickMenu} />
+            <Icon name="menu" class={s.icon} onClick={onClickMenu}/>
             {refOverlayVisible.value &&
-                <Overlay onClose={() => refOverlayVisible.value = false} />
+                <Overlay onClose={() => refOverlayVisible.value = false}/>
             }
         </>
 

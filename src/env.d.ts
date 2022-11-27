@@ -40,3 +40,7 @@ type Resource<T> = {
 type ResourceError = {
   errors: Record<string, string[]>
 }
+type User = {
+  id: number;
+  email: string;
+}
