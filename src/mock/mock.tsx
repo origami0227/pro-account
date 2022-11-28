@@ -27,7 +27,7 @@ export const mockItemCreate: Mock = config => {
     }]
 }
 
-export const mockTagShow: Mock = config =>{
+export const mockTagShow: Mock = config => {
     const createTag = (attrs?: any) =>
         ({
             id: createId(),
@@ -107,7 +107,7 @@ export const mockTagEdit: Mock = config => {
     return [200, {resource: createTag()}]
 }
 export const mockItemIndex: Mock = (config) => {
-    const { kind, page } = config.params
+    const {kind, page} = config.params
     const per_page = 25
     const count = 26
     const createPaper = (page = 1) => ({
@@ -124,7 +124,7 @@ export const mockItemIndex: Mock = (config) => {
             ...attrs
         })
     const createItem = (n = 1, attrs?: any) =>
-        Array.from({ length: n }).map(() => ({
+        Array.from({length: n}).map(() => ({
             id: createId(),
             user_id: createId(),
             amount: Math.floor(Math.random() * 10000),
@@ -146,7 +146,7 @@ export const mockItemIndex: Mock = (config) => {
         return [200, createBody(25)]
     } else if (page === 2) {
         return [200, createBody(1)]
-    }else{
+    } else {
         return [200, {}]
     }
 }
@@ -159,15 +159,29 @@ export const mockItemIndexBalance: Mock = config => {
 }
 
 export const mockItemSummary: Mock = config => {
-    return [200, {
-        "groups": [
-            { "happen_at": "2022-11-18T00:00:00.000+0800", "amount": 100 },
-            { "happen_at": "2022-11-22T00:00:00.000+0800", "amount": 300 },
-            { "happen_at": "2022-11-23T00:00:00.000+0800", "amount": 400 },
-            { "happen_at": "2022-11-25T00:00:00.000+0800", "amount": 700 },
-            { "happen_at": "2022-11-29T00:00:00.000+0800", "amount": 200 }
-        ],
-        "summary": 600
-    }]
+    if (config.params.group_by === 'happen_at') {
+        return [200, {
+            groups: [
+                {"happen_at": "2022-11-18T00:00:00.000+0800", "amount": 100},
+                {"happen_at": "2022-11-22T00:00:00.000+0800", "amount": 300},
+                {"happen_at": "2022-11-23T00:00:00.000+0800", "amount": 400},
+                {"happen_at": "2022-11-25T00:00:00.000+0800", "amount": 700},
+                {"happen_at": "2022-11-29T00:00:00.000+0800", "amount": 200}
+            ],
+            "summary": 600
+        }]
+    } else {
+        return [
+            200,
+            {
+                groups: [
+                    {tag_id: 1, tag: {id: 1, name: '交通'}, amount: 100},
+                    {tag_id: 2, tag: {id: 2, name: '吃饭'}, amount: 300},
+                    {tag_id: 3, tag: {id: 3, name: '购物'}, amount: 200}
+                ],
+                summary: 600
+            }
+        ]
+    }
 }
 
