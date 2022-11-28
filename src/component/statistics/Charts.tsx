@@ -25,29 +25,19 @@ export const Charts = defineComponent({
         const kind = ref('expenses')
         const data1 = ref<Data1>([]) //data容器
         const betterData1 = computed<[string, number][]>(()=> {
-            //判断
-            if(!props.startDate || !props.endDate) {
-                return []
-            }
-            //声明一个空数组，然后向这个数组里面push进一个月的数据
-            const array = []
-            //diff算出这个月有多少天 用结束时间戳减去开始时间戳算出秒
+            if(!props.startDate || !props.endDate) { return [] }
             const diff = new Date(props.endDate).getTime() - new Date(props.startDate).getTime()
-            //n等于 diff算出的秒除以一天的秒数➕1得到天数
             const n = diff / DAY + 1
-            let data1Index = 0
-            for(let i=0; i<n; i++) {
-                //格式要求
+            //Array.from({length:n})这种声明方法是有key的也就是有下标，然后进行map
+            //否则需要fill
+            return Array.from({length: n}).map((_, i)=>{
                 const time = new Time(props.startDate+'T00:00:00.000+0800').add(i, 'day').getTimestamp()
-                if(data1.value[data1Index] && new Date(data1.value[data1Index].happen_at).getTime() === time){
-                    //放进空数组
-                    array.push([new Date(time).toISOString(), data1.value[data1Index].amount])
-                    data1Index += 1
-                }else{
-                    array.push([new Date(time).toISOString(), 0])
-                }
-            }
-            return array as [string, number][]
+                const item = data1.value[0]
+                const amount = (item && new Date(item.happen_at).getTime() === time)
+                    ? data1.value.shift()!.amount //拿到data1的第一项
+                    : 0
+                return [new Date(time).toISOString(), amount]
+            })
         })
 
         onMounted(async ()=>{
