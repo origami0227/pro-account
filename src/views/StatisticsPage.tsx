@@ -8,7 +8,8 @@ export const StatisticsPage = defineComponent({
         return () => (
             <TimeTabsLayout
                 rerenderOnSwitchTab={true}
-                component={Charts}/>
+                component={Charts}
+                hideThisYear={true}/>
         )
     }
 })
