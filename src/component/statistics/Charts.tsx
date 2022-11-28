@@ -1,4 +1,4 @@
-import {computed, defineComponent, onMounted, PropType, reactive, ref} from 'vue';
+import {computed, defineComponent, onMounted, PropType, reactive, ref, watch} from 'vue';
 import s from './Charts.module.scss';
 import {FormItem} from "../../shared/Form";
 import {LineChart} from './LineChart';
@@ -45,7 +45,7 @@ export const Charts = defineComponent({
             })
         })
 
-        onMounted(async () => {
+        const fetchData1 = async () => {
             //挂载时请求记账数据
             const response = await http.get<{ groups: Data1, summary: number }>('/items/summary', {
                 happen_after: props.startDate, //开始时间
@@ -56,7 +56,10 @@ export const Charts = defineComponent({
 
             })
             data1.value = response.data.groups //赋值给data1
-        })
+        }
+        onMounted(fetchData1)
+        //切换tab时重新发请求
+        watch(() => kind.value, fetchData1)
         //data2 饼图
         const data2 = ref<Data2>([])
         const betterData2 = computed<{ name: string; value: number }[]>(() =>
@@ -65,7 +68,7 @@ export const Charts = defineComponent({
                 value: item.amount
             }))
         )
-        onMounted(async () => {
+        const fetchData2 = async () => {
             //请求饼图数据
             const response = await http.get<{ groups: Data2; summary: number }>('/items/summary', {
                 happen_after: props.startDate,
@@ -75,7 +78,10 @@ export const Charts = defineComponent({
                 _mock: 'itemSummary'
             })
             data2.value = response.data.groups
-        })
+        }
+        onMounted(fetchData2)
+        //切换tab时重新发请求
+        watch(() => kind.value, fetchData2)
         //  data3
 
         const betterData3 = computed<{ tag: Tag, amount: number, percent: number }[]>(() => {
