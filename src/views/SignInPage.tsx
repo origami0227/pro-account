@@ -72,7 +72,6 @@ export const SignInPage = defineComponent({
                 .catch(onError)
                 .finally(enable)//取消禁用
             //发送成功
-            console.log(response)
             refValidationCode.value.startCount()//成功后调用FormItem暴露出来的startCount
         }
         return () => (

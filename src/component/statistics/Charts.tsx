@@ -48,8 +48,6 @@ export const Charts = defineComponent({
                 kind: kind.value, //收入或者支出
                 _mock: 'itemSummary' //mock数据
             })
-            console.log('response.data')
-            console.log(response.data)
             data1.value = response.data.groups //赋值给data1
         })
         return () => (
