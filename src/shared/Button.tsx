@@ -38,9 +38,9 @@ export const Button = defineComponent({
                 return props.disabled
             }
         })
-        const onClick = ()=>{
+        const onClick = (e:MouseEvent)=>{
             // @ts-ignore
-            props.onClick?.()
+            props.onClick?.(e)
             selfDisabled.value = true //点击后自我沉默
             setTimeout(()=>{
                 selfDisabled.value = false
