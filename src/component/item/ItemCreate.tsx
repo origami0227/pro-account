@@ -47,7 +47,7 @@ export const ItemCreate = defineComponent({
                 '收入': 'income',
             }
             await http.post<Resource<Item>>('/items', {...formData, kind: kindMap[formData.kind]},
-                {_mock: 'itemCreate'}
+                {_mock: 'itemCreate',_autoLoading:true}
             ).catch(onError)
             router.push("/items")
         }

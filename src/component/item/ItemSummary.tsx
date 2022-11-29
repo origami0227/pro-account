@@ -33,6 +33,7 @@ export const ItemSummary = defineComponent({
                 page: page.value + 1,
             },{
                 _mock: 'itemIndex', //mock数据
+                _autoLoading: true,//加载中
             })
             //析构赋值拿到resources和pager
             const {resources, pager} = response.data

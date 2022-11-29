@@ -53,7 +53,8 @@ export const Charts = defineComponent({
                 kind: kind.value, //收入或者支出
                 group_by: 'happen_at',
             },{
-                _mock: 'itemSummary' //mock数据
+                _mock: 'itemSummary', //mock数据
+                _autoLoading: true,
             })
             data1.value = response.data.groups //赋值给data1
         }
