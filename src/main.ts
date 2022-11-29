@@ -10,7 +10,7 @@ const router = createRouter({history, routes})
 fetchMe()//刷新获取用户信息
 const whiteList: Record<string, 'exact' | 'startsWith'> = {
     '/': 'exact',
-    '/start': 'exact',
+    '/items': 'exact',
     '/welcome': 'startsWith',
     '/sign_in': 'startsWith',
 }//定义白名单

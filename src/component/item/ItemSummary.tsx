@@ -5,6 +5,9 @@ import {http} from "../../shared/Http";
 import {Money} from "../../shared/Money";
 import {Button} from '../../shared/Button'
 import {Datetime} from "../../shared/Datetime";
+import { RouterLink } from 'vue-router'
+import {Icon} from "../../shared/Icon";
+import { Center } from '../../shared/Center'
 
 export const ItemSummary = defineComponent({
     props: {
@@ -80,20 +83,20 @@ export const ItemSummary = defineComponent({
         })
         return () => (
             <div class={s.wrapper}>
-                {items.value ? (
+                {(items.value && items.value.length > 0) ? (
                     <>
                         <ul class={s.total}>
                             <li>
                                 <span>收入</span>
-                                <Money value={itemsBalance.income}/>
+                                <Money value={itemsBalance.income} />
                             </li>
                             <li>
                                 <span>支出</span>
-                                <Money value={itemsBalance.expenses}/>
+                                <Money value={itemsBalance.expenses} />
                             </li>
                             <li>
                                 <span>净收入</span>
-                                <Money value={itemsBalance.balance}/>
+                                <Money value={itemsBalance.balance} />
                             </li>
                         </ul>
                         <ol class={s.list}>
@@ -113,18 +116,27 @@ export const ItemSummary = defineComponent({
                             ))}
                         </ol>
                         <div class={s.more}>
-                            {/*如果有hasMore就显示加载更多的按钮*/}
                             {hasMore.value ?
-                                <Button class={s.hasMore} onClick={fetchItems}>加载更多</Button> :
-                                <span class={s.noMore}>没有更多</span>
+                                <Button onClick={fetchItems}>加载更多</Button> :
+                                <span>没有更多</span>
                             }
                         </div>
                     </>
                 ) : (
-                    //没有items就显示记录为空
-                    <div>记录为空</div>
+                    <>
+                        <Center class={s.pig_wrapper}>
+                            <Icon name="pig" class={s.pig} />
+                        </Center>
+                        <div class={s.button_wrapper}>
+                            <RouterLink to="/items/create">
+                                <Button class={s.button}>开始记账</Button>
+                            </RouterLink>
+                        </div>
+                    </>
                 )}
-                <FloatButton iconName="add"/>
+                <RouterLink to="/items/create">
+                    <FloatButton iconName='add' />
+                </RouterLink>
             </div>
         )
     },

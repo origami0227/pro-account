@@ -8,7 +8,6 @@ import {SecondActions} from "../component/welcome/SecondActions";
 import {Third} from "../component/welcome/Third";
 import {ThirdActions} from "../component/welcome/ThirdActions";
 import {Welcome} from "../views/Welcome";
-import {StartPage} from "../views/StartPage";
 import {ItemCreate} from "../component/item/ItemCreate";
 import {ItemPage} from "../views/ItemPage";
 import {ItemList} from "../component/item/ItemList";
@@ -25,7 +24,7 @@ export const routes: RouteRecordRaw[] = [
         path: '/welcome',
         component: Welcome,
         beforeEnter: (to, from, next) => {
-            localStorage.getItem('skipFeatures') === 'yes' ? next('/start') : next()
+            localStorage.getItem('skipFeatures') === 'yes' ? next('/items') : next()
         },//进行判断
         children: [
             {path: '', redirect: '/welcome/1',},
@@ -34,9 +33,6 @@ export const routes: RouteRecordRaw[] = [
             {path: '3', name: 'Welcome3', components: {main: Third, footer: ThirdActions},},
             {path: '4', name: 'Welcome4', components: {main: Forth, footer: ForthActions},},
         ]
-    },
-    {
-        path: '/start', component: StartPage
     },
     {
         path: '/items', component: ItemPage,
