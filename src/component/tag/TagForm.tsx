@@ -36,10 +36,10 @@ export const TagForm = defineComponent({
             if (!hasError((errors))) {
                 const promise = await formData.id ?
                     http.patch(`/tags/${formData.id}`, formData, {
-                        params: {_mock: 'tagEdit'},
+                        _mock: 'tagEdit',
                     }) :
                     http.post('/tags', formData, {
-                        params: {_mock: 'tagCreate'},
+                        _mock: 'tagCreate',
                     })
                 await promise.catch((error) =>
                     onFormError(error, (data) =>
@@ -49,13 +49,16 @@ export const TagForm = defineComponent({
                 router.back()//成功后返回
             }
         }
-        onMounted(async ()=>{
+        onMounted(async () => {
             //挂在之后 对是否传id进行判断
-            if(!props.id){ return }
+            if (!props.id) {
+                return
+            }
             const response = await http.get<Resource<Tag>>(`/tags/${props.id}`, {
+            },{
                 _mock: 'tagShow'
             })
-            Object.assign(formData,response.data.resource)
+            Object.assign(formData, response.data.resource)
         })
         return () => (
             <Form onSubmit={onSubmit}>

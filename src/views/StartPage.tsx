@@ -1,4 +1,4 @@
-import {defineComponent, ref} from 'vue';
+import {defineComponent, onMounted, ref} from 'vue';
 import {Button} from '../shared/Button';
 import {Center} from '../shared/Center';
 import {FloatButton} from '../shared/FloatButton';
@@ -7,11 +7,19 @@ import s from './StartPage.module.scss';
 import {OverlayIcon} from "../shared/Overlay";
 import {RouterLink} from "vue-router";
 import {MainLayout} from "../layouts/MainLayout";
+import {Toast} from "vant";
 
 
 export const StartPage = defineComponent({
     setup: (props, context) => {
-
+        //UI演示
+        // onMounted(()=>{
+        //     // Toast.loading({
+        //     //   message: '加载中...',
+        //     //   forbidClick: true,
+        //     //   duration: 0
+        //     // });
+        // })
         return () => (
 
             <MainLayout>{

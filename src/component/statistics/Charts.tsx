@@ -52,8 +52,8 @@ export const Charts = defineComponent({
                 happen_before: props.endDate, //结束时间
                 kind: kind.value, //收入或者支出
                 group_by: 'happen_at',
+            },{
                 _mock: 'itemSummary' //mock数据
-
             })
             data1.value = response.data.groups //赋值给data1
         }
@@ -75,6 +75,7 @@ export const Charts = defineComponent({
                 happen_before: props.endDate,
                 kind: kind.value,
                 group_by: 'tag_id',
+            },{
                 _mock: 'itemSummary'
             })
             data2.value = response.data.groups

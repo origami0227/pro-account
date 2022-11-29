@@ -43,18 +43,18 @@ export const ItemCreate = defineComponent({
             //由于之前我们请求中的kind发出的是中文不符合后端标准 所以会返回状态码500
             //要进行一个对象的映射 让中文改成英文
             const kindMap: Record<string, string> = {
-                '支出' : 'expenses',
-                '收入' : 'income',
+                '支出': 'expenses',
+                '收入': 'income',
             }
-            await http.post<Resource<Item>>('/items', {...formData,kind:kindMap[formData.kind]},
-                {params: {_mock: 'itemCreate'}}
+            await http.post<Resource<Item>>('/items', {...formData, kind: kindMap[formData.kind]},
+                {_mock: 'itemCreate'}
             ).catch(onError)
             router.push("/items")
         }
         return () => (
             <MainLayout class={s.layout}>{{
                 title: () => '记一笔',
-                icon: () => <BackIcon />,
+                icon: () => <BackIcon/>,
                 default: () => <>
                     <div class={s.wrapper}>
                         <Tabs v-model:selected={formData.kind} class={s.tabs}>

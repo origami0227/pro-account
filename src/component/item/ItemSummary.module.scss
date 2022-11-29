@@ -65,4 +65,10 @@
 .more{
   padding-top: 32px;
   text-align: center;
+  .hasMore{
+    margin-bottom: 20px;
+  }
+  .noMore{
+    padding-bottom: 20px;
+  }
 }

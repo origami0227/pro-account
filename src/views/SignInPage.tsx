@@ -68,7 +68,7 @@ export const SignInPage = defineComponent({
         const onClickSendValidationCode = async () => {
             disabled()//先禁用
             //使用axios来发送请求，请求结果使用await，注意使用await需要在函数async中进行
-            const response = await http.post('/validation_codes', {email: formData.email})
+            const response = await http.post('/validation_codes', {email: formData.email},{_autoLoading: true})
                 .catch(onError)
                 .finally(enable)//取消禁用
             //发送成功

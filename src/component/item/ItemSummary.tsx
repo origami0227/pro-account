@@ -31,6 +31,7 @@ export const ItemSummary = defineComponent({
                 happen_after: props.startDate,//起始事件
                 happen_before: props.endDate, //结束事件
                 page: page.value + 1,
+            },{
                 _mock: 'itemIndex', //mock数据
             })
             //析构赋值拿到resources和pager
@@ -64,6 +65,7 @@ export const ItemSummary = defineComponent({
                 happen_after: props.startDate,
                 happen_before: props.endDate,
                 page: page.value + 1,
+            },{
                 _mock: 'itemIndexBalance',
             })
             Object.assign(itemsBalance, response.data)
@@ -112,8 +114,8 @@ export const ItemSummary = defineComponent({
                         <div class={s.more}>
                             {/*如果有hasMore就显示加载更多的按钮*/}
                             {hasMore.value ?
-                                <Button onClick={fetchItems}>加载更多</Button> :
-                                <span>没有更多</span>
+                                <Button class={s.hasMore} onClick={fetchItems}>加载更多</Button> :
+                                <span class={s.noMore}>没有更多</span>
                             }
                         </div>
                     </>
