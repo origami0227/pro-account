@@ -1,4 +1,4 @@
-import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
+import axios, {AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse} from "axios";
 import {
     mockItemCreate,
     mockItemIndex,
@@ -14,34 +14,43 @@ type GetConfig = Omit<AxiosRequestConfig, 'params' | 'url' | 'method'>
 type PostConfig = Omit<AxiosRequestConfig, 'url' | 'data' | 'method'>
 type PatchConfig = Omit<AxiosRequestConfig, 'url' | 'data'>
 type DeleteConfig = Omit<AxiosRequestConfig, 'params'>
+
 //提前四个api的config
 
 export class Http {
     instance: AxiosInstance
+
     constructor(baseURL: string) {
         this.instance = axios.create({
             baseURL
         })
     }
+
     get<R = unknown>(url: string, query?: Record<string, JSONValue>, config?: GetConfig) {
-        return this.instance.request<R>({ ...config, url: url, params: query, method: 'get' })
+        return this.instance.request<R>({...config, url: url, params: query, method: 'get'})
     }
+
     post<R = unknown>(url: string, data?: Record<string, JSONValue>, config?: PostConfig) {
-        return this.instance.request<R>({ ...config, url, data, method: 'post' })
+        return this.instance.request<R>({...config, url, data, method: 'post'})
     }
+
     patch<R = unknown>(url: string, data?: Record<string, JSONValue>, config?: PatchConfig) {
-        return this.instance.request<R>({ ...config, url, data, method: 'patch' })
+        return this.instance.request<R>({...config, url, data, method: 'patch'})
     }
+
     delete<R = unknown>(url: string, query?: Record<string, string>, config?: DeleteConfig) {
-        return this.instance.request<R>({ ...config, url: url, params: query, method: 'delete' })
+        return this.instance.request<R>({...config, url: url, params: query, method: 'delete'})
     }
 }
+
 //mock函数
 const mock = (response: AxiosResponse) => {
     //先对地址进行检查，如果是这三个地址就进行篡改
-    if (location.hostname !== 'localhost'
+    if (true || location.hostname !== 'localhost'
         && location.hostname !== '127.0.0.1' //这三个地址是开发的本地地址
-        && location.hostname !== '192.168.3.57') { return false }//如果不是这个三个地址就return false 也就是不能更改
+        && location.hostname !== '192.168.3.57') {
+        return false
+    }//如果不是这个三个地址就return false 也就是不能更改
     switch (response.config?._mock) {//看请求参数是否含有_mock,有mock就根据mock字符串找到对应的函数
         case 'tagIndex':
             [response.status, response.data] = mockTagIndex(response.config)
@@ -79,7 +88,7 @@ http.instance.interceptors.request.use(config => {
         config.headers!.Authorization = `Bearer ${jwt}`
     }
     //希望自动展示loading
-    if(config._autoLoading === true){
+    if (config._autoLoading === true) {
         Toast.loading({
             message: '加载中...',
             forbidClick: true,
@@ -88,14 +97,14 @@ http.instance.interceptors.request.use(config => {
     }
     return config
 })
-http.instance.interceptors.response.use((response)=>{
-    if(response.config._autoLoading === true){
+http.instance.interceptors.response.use((response) => {
+    if (response.config._autoLoading === true) {
         //取消自动loading的拦截器
         Toast.clear();
     }
     return response
-}, (error: AxiosError)=>{
-    if(error.response?.config._autoLoading === true){
+}, (error: AxiosError) => {
+    if (error.response?.config._autoLoading === true) {
         Toast.clear();
     }
     throw error
@@ -104,7 +113,7 @@ http.instance.interceptors.response.use((response)=>{
 http.instance.interceptors.response.use((response) => {
     mock(response)
     if (response.status >= 400) {
-        throw { response }
+        throw {response}
     } else {
         return response
     }
@@ -118,7 +127,9 @@ http.instance.interceptors.response.use((response) => {
 })
 //拦截器可以不止一个
 http.instance.interceptors.response.use(
-    response => {return response},
+    response => {
+        return response
+    },
     error => {
         if (error.response) {
             const axiosError = error as AxiosError

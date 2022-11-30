@@ -15,11 +15,11 @@ export const TagForm = defineComponent({
         const route = useRoute(); //在useRouter中获取kind字段
         const formData = reactive<Partial<Tag>>({
             id: undefined, //增加id字段 默认undefined
-            kind: route.query.kind!.toString(), //获取kind字段
+            kind: route.query.kind!.toString() as ('expenses' | 'income'), //获取kind字段
             name: '',
             sign: '',
         })
-        const errors = reactive<{ [k in keyof typeof formData]?: string[] }>({})
+        const errors = reactive<FormErrors<typeof formData>>({})
         const router = useRouter()
         const onSubmit = async (e: Event) => {
             e.preventDefault()
@@ -56,8 +56,7 @@ export const TagForm = defineComponent({
             if (!props.id) {
                 return
             }
-            const response = await http.get<Resource<Tag>>(`/tags/${props.id}`, {
-            },{
+            const response = await http.get<Resource<Tag>>(`/tags/${props.id}`, {}, {
                 _mock: 'tagShow',
             })
             Object.assign(formData, response.data.resource)
