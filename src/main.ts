@@ -5,7 +5,7 @@ import {routes} from './config/routes'
 import {history} from './shared/history'
 import '@svgstore';
 import {useMeStore} from "./stores/useMeStore";
-import {createPinia} from "pinia";
+import {createPinia, storeToRefs} from "pinia";
 
 const router = createRouter({history, routes})
 const pinia = createPinia() //创建Pinia
@@ -15,6 +15,7 @@ app.use(pinia) //使用Pinia
 app.mount('#app')
 
 const meStore = useMeStore()
+const {mePromise} = storeToRefs(meStore)
 meStore.fetchMe()
 
 // fetchMe()//刷新获取用户信息
@@ -35,7 +36,7 @@ router.beforeEach(async (to, from) => {
             return true
         }
     }
-    return meStore.mePromise!.then(//beforeEach可以直接return一个promise
+    return mePromise!.value!.then(//beforeEach可以直接return一个promise
         () => true,//可以获取到用户信息
         () => '/sign_in?return_to=' + to.path//false 获取不到用户信息再跳转到登陆界面
     )
