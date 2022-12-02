@@ -8,6 +8,7 @@ import {Datetime} from "../../shared/Datetime";
 import { RouterLink } from 'vue-router'
 import {Icon} from "../../shared/Icon";
 import { Center } from '../../shared/Center'
+import {useAfterMe} from "../../hooks/useAfterMe";
 
 export const ItemSummary = defineComponent({
     props: {
@@ -46,7 +47,7 @@ export const ItemSummary = defineComponent({
             hasMore.value = (pager.page - 1) * pager.per_page + resources.length < pager.count
             page.value += 1
         }
-        onMounted(fetchItems)//挂载时发送请求
+        useAfterMe(fetchItems)//挂载时发送请求
 
         //watch中第一个参数是函数，返回要watch的对象，第二个参数一样是函数，返回要做的事件。
         watch(() => [props.startDate, props.endDate], async () => {
@@ -74,7 +75,7 @@ export const ItemSummary = defineComponent({
             })
             Object.assign(itemsBalance, response.data)
         }
-        onMounted(fetchItemsBalance)
+        useAfterMe(fetchItemsBalance)
         watch(() => [props.startDate, props.endDate], async () => {
             Object.assign(itemsBalance, {
                 expenses: 0, income: 0, balance: 0
