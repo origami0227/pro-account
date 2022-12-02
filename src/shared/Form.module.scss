@@ -30,6 +30,9 @@
     border: 1px solid var(--input-border-color);
     border-radius: var(--input-radius);
     padding: 0 8px;
+    background-color: #e0ebf6;
+    font-size: 17px;
+    font-weight: bold;
   }
   &.validationCodeInput {
     flex-grow: 0;

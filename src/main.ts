@@ -4,10 +4,20 @@ import {createRouter} from 'vue-router'
 import {routes} from './config/routes'
 import {history} from './shared/history'
 import '@svgstore';
-import {fetchMe, mePromise} from './shared/me';
+import {useMeStore} from "./stores/useMeStore";
+import {createPinia} from "pinia";
 
 const router = createRouter({history, routes})
-fetchMe()//刷新获取用户信息
+const pinia = createPinia() //创建Pinia
+const app = createApp(App)
+app.use(router)
+app.use(pinia) //使用Pinia
+app.mount('#app')
+
+const meStore = useMeStore()
+meStore.fetchMe()
+
+// fetchMe()//刷新获取用户信息
 const whiteList: Record<string, 'exact' | 'startsWith'> = {
     '/': 'exact',
     '/items': 'exact',
@@ -25,13 +35,9 @@ router.beforeEach(async (to, from) => {
             return true
         }
     }
-    return mePromise!.then(//beforeEach可以直接return一个promise
+    return meStore.mePromise!.then(//beforeEach可以直接return一个promise
         () => true,//可以获取到用户信息
         () => '/sign_in?return_to=' + to.path//false 获取不到用户信息再跳转到登陆界面
     )
 
 })
-
-const app = createApp(App)
-app.use(router)
-app.mount('#app')

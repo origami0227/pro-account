@@ -8,11 +8,12 @@ import s from './SignInPage.module.scss';
 import {http} from '../shared/Http';
 import {useBool} from '../hooks/useBool';
 import {useRoute, useRouter} from "vue-router";
-import { refreshMe } from '../shared/me';
 import {BackIcon} from "../shared/BackIcon";
+import {useMeStore} from "../stores/useMeStore";
 
 export const SignInPage = defineComponent({
     setup: (props, context) => {
+        const meStore = useMeStore()
         const formData = reactive({
             email: '',
             code: ''
@@ -43,7 +44,7 @@ export const SignInPage = defineComponent({
                 //使用查询参数的思路
                 // await router.push('/sign_in?return_to'+encodeURIComponent(route.fullPath))//设置return_to
                 const returnTo = route.query.return_to?.toString() //因为地址栏一般不用答谢所以改成下划线，query后面接字符串就可以
-                refreshMe()
+                meStore.refreshMe()
                 await router.push(returnTo || '/')
 
                 //使用localStorage的思路
