@@ -38,7 +38,7 @@ export const Charts = defineComponent({
             return Array.from({length: n}).map((_, i) => {
                 const time = new Time(props.startDate + 'T00:00:00.000+0800').add(i, 'day').getTimestamp()
                 const item = data1.value[0]
-                const amount = (item && new Date(item.happen_at).getTime() === time)
+                const amount = (item && new Date(item.happen_at + ' 00:00').getTime() === time)
                     ? data1.value.shift()!.amount //拿到data1的第一项
                     : 0
                 return [new Date(time).toISOString(), amount]
@@ -52,7 +52,7 @@ export const Charts = defineComponent({
                 happen_before: props.endDate, //结束时间
                 kind: kind.value, //收入或者支出
                 group_by: 'happen_at',
-            },{
+            }, {
                 _mock: 'itemSummary', //mock数据
                 _autoLoading: true,
             })
@@ -76,7 +76,7 @@ export const Charts = defineComponent({
                 happen_before: props.endDate,
                 kind: kind.value,
                 group_by: 'tag_id',
-            },{
+            }, {
                 _mock: 'itemSummary'
             })
             data2.value = response.data.groups
