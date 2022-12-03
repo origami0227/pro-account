@@ -33,7 +33,7 @@ export const Tags = defineComponent({
         const router = useRouter();
         const onLongPress = (tagId: Tag['id']) => {
             //声明长按事件,跳转
-            router.push(`/tags/${tagId}/edit?kind=${props.kind}&return_to=${router.currentRoute.value.fullPath}`) //跳转到对应id
+            router.push(`/tags/${tagId}/edit?kind=${props.kind}`) //跳转到对应id
         }
         const onTouchStart = (e: TouchEvent, tag: Tag) => {
             currentTag.value = e.currentTarget as HTMLDivElement //标记开始时指向的元素
