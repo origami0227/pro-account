@@ -33,7 +33,7 @@ export const ItemSummary = defineComponent({
         //watch中第一个参数是函数，返回要watch的对象，第二个参数一样是函数，返回要做的事件。
         watch(() => [props.startDate, props.endDate], async () => {
             //初始化
-            itemStore.reset()
+            itemStore.$reset()
             itemStore.fetchItems()
         })
         const itemsBalance = reactive({
