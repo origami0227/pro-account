@@ -12,7 +12,7 @@ type Actions = {
     fetchNextPage: (startDate?: string, endDate?: string) => void
 }
 
-export const useItemStore = (id: string | string[]) =>
+export const useItemStore = (id: string | (string | undefined)[]) =>
     defineStore<string, State, {}, Actions>(typeof id === 'string' ? id : id.join('-'), {
         state: () => ({
             items: [], //记账事件默认是一个空数组，记录是否含有items
