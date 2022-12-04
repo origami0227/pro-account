@@ -29,6 +29,7 @@ export const Overlay = defineComponent({
             })
             //移除登录信息
             localStorage.removeItem('jwt')
+            window.location.reload() //重新加载
         }
         const close = () => {
             props.onClose?.()
