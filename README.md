@@ -1,5 +1,10 @@
 # 卡比记账 Vue3 + TSX项目
 
+
+## 部署
+`./coscli cp -r dist cos://kabi-test-1-1315647539`
+
+
 ## 编码规范
 
 ### ref默认值
