@@ -6,6 +6,7 @@ declare module '*.vue' {
   const component: DefineComponent<{}, {}, any>
   export default component
 }
+declare var DEBUG: boolean
 
 type JSONValue = null | boolean | string | number | JSONValue[] | Record<string, JSONValue>
 type Tag = { //声明Tag类型
