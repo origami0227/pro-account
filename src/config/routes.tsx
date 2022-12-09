@@ -16,14 +16,15 @@ import {TagCreate} from "../component/tag/TagCreate";
 import {TagEdit} from "../component/tag/TagEdit";
 import {SignInPage} from "../views/SignInPage";
 import {StatisticsPage} from "../views/StatisticsPage";
-import { http } from "../shared/Http";
+import {http} from "../shared/Http";
 import {ComingSoon} from "../shared/ComingSoon";
 
 export const routes: RouteRecordRaw[] = [
     {path: '/', redirect: '/welcome'},
     {
         path: '/welcome',
-        component: Welcome,
+        // component:Welcome
+        component: () => import('../views/Welcome'),
         beforeEnter: (to, from, next) => {
             localStorage.getItem('skipFeatures') === 'yes' ? next('/items') : next()
         },//进行判断
@@ -36,27 +37,27 @@ export const routes: RouteRecordRaw[] = [
         ]
     },
     {
-        path: '/items', component: ItemPage,
+        path: '/items', component: () => import('../views/ItemPage'),
         children: [
             {path: '', component: ItemList},
             {path: 'create', component: ItemCreate},
         ]
     },
     {
-        path: '/tags', component: TagPage,
+        path: '/tags', component: () => import('../views/TagPage'),
         children: [
-            {path: 'create', component: TagCreate},
-            {path: ':id/edit', component: TagEdit}
+            {path: 'create', component: () => import('../component/tag/TagCreate')},
+            {path: ':id/edit', component: () => import('../component/tag/TagEdit')}
         ]
     },
     {
-        path: '/sign_in', component: SignInPage
+        path: '/sign_in', component: () => import('../views/SignInPage')
     },
     {
-        path: '/statistics', component: StatisticsPage
-    },{
-        path: '/export', component: ComingSoon
-    },{
-        path: '/notify', component: ComingSoon
+        path: '/statistics', component: () => import('../views/StatisticsPage')
+    }, {
+        path: '/export', component: () => import('../shared/ComingSoon')
+    }, {
+        path: '/notify', component: () => import('../shared/ComingSoon')
     }
 ]

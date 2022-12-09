@@ -2,6 +2,7 @@
 
 
 ## 部署
+`npm run build`
 `./coscli cp -r dist cos://kabi-test-1-1315647539`
 
 
