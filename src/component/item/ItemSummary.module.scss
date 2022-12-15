@@ -76,17 +76,19 @@
   width: 100%;
   &_wrapper {
     padding: 16px 16px;
+    p {
+      padding: 4px 0 20px;
+      color: #CCCCCC;
+      font-size: 18px;
+      text-align: center;
+    }
   }
 }
 
 .pig{
-  width: 128px;
-  height: 128px;
+  width: 178px;
+  height: 178px;
   &_wrapper{
-    padding: 120px 0;
-    font-size: 20px;
-    p {
-      padding: 4px 0;
-    }
+    padding: 90px 0;
   }
 }
